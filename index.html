@@ -1,0 +1,147 @@
+<html>
+
+<head>
+
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+
+    <link rel="stylesheet" href="css/bootstrap.min.css" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
+
+    <style>
+        @font-face {
+            font-family: 'Roboto Condensed';
+            src: url(css/Roboto_Condensed/RobotoCondensed-Regular.ttf);
+        }
+        body{
+            font-family: 'Roboto Condensed', sans-serif;
+            background-color: #dbdbdb;
+        }
+    </style>
+
+</head>
+
+<body>
+
+<div class="container">
+
+    <div class="row">
+        <div class="col-md-12 text-center">
+            <h2>Google Authenticator</h2>
+            <hr/>
+        </div>
+    </div>
+
+    <div class="accordion" id="accordionExample">
+        <div class="card">
+            <div class="card-header" id="headingOne">
+                <h2 class="mb-0">
+                    <button class="btn btn-link" type="button" data-toggle="collapse" data-target="#collapseOne" aria-expanded="true" aria-controls="collapseOne">
+                        Gerar Secret Key
+                    </button>
+                </h2>
+            </div>
+            <div id="collapseOne" class="collapse show" aria-labelledby="headingOne" data-parent="#accordionExample">
+                <div class="card-body">
+                    <div class="row">
+                        <div class="col-md-4 text-center">
+                            <div class="form-group">
+                                <label for="secretKey">Secret Key</label>
+                                <input type="text" disabled class="form-control text-center" id="secretKey">
+                            </div>
+                            <button onclick="gerarSecretKey()" class="btn btn-primary">Gerar Secret Key</button>
+                        </div>
+
+                        <div class="col-md-4 text-center">
+                            <div class="form-group">
+                                <label for="totp">Chave</label>
+                                <h1><span class="badge badge-primary" id="totp">-</span></h1>
+                            </div>
+
+                            <div class="form-group">
+                                <label for="atualizaEm">Atualiza em...</label>
+                                <h1><span class="badge badge-warning" id='atualizaEm'>0</span></h1>
+                            </div>
+                        </div>
+
+                        <div class="col-md-4 text-center">
+                            <label>QR Code</label>
+                            <div class="input"><img id="qrImg" src="" /></div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="card">
+            <div class="card-header" id="headingTwo">
+                <h2 class="mb-0">
+                    <button class="btn btn-link collapsed" type="button" data-toggle="collapse" data-target="#collapseTwo" aria-expanded="false" aria-controls="collapseTwo">
+                        Validar Chave
+                    </button>
+                </h2>
+            </div>
+            <div id="collapseTwo" class="collapse" aria-labelledby="headingTwo" data-parent="#accordionExample">
+                <div class="card-body">
+                    <div class="row">
+                        <div class="col-md-4 text-center">
+                            <div class="form-group">
+                                <label for="validarChave">Validar Chave</label>
+                                <input type="text" maxlength="6" class="form-control text-center" id="validarChave">
+                            </div>
+                        </div>
+                        <div class="col-md-8 text-center">
+                            <label for="sucesso">Resultado:</label>
+                            <div class="alert alert-success" id="sucesso" role="alert">
+                                Chave válida!
+                            </div>
+                            <div class="alert alert-danger" id="falha" role="alert">
+                                Chave inválida!
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+
+</div>
+
+
+<script src="js/sha.js"></script>
+<script src="js/jquery-3.3.1.slim.min.js" integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo" crossorigin="anonymous"></script>
+<script src="js/popper.min.js" integrity="sha384-UO2eT0CpHqdSJQ6hJty5KVphtPhzWj9WO1clHTMGa3JDZwrnQq4sF86dIHNDz0W1" crossorigin="anonymous"></script>
+<script src="js/bootstrap.min.js" integrity="sha384-JjSmVgyd0p3pXB1rRibZUAYoIIy6OrQ6VrjIEaFf/nJGzIxFDsf4x0xIM+B07jRM" crossorigin="anonymous"></script>
+<script src="js/totp.js"></script>
+<script>
+
+    $('#validarChave').keyup(function() {
+
+        var code = $('#validarChave').val();
+        if (code.length === 6) {
+            var actualCode = criarTotp();
+            if (actualCode===code) {
+                document.getElementById("sucesso").style.display = 'block';
+                document.getElementById("falha").style.display = 'none';
+            } else {
+                document.getElementById("falha").style.display = 'block';
+                document.getElementById("sucesso").style.display = 'none';
+            }
+        } else {
+            document.getElementById("sucesso").style.display = 'none';
+            document.getElementById("falha").style.display = 'none';
+        }
+
+    });
+
+    $(function() {
+        document.getElementById("sucesso").style.display = 'none';
+        document.getElementById("falha").style.display = 'none';
+        $('#secretKey').val("");
+        $('#validarChave').val("");
+    });
+
+</script>
+
+</body>
+
+</html>
